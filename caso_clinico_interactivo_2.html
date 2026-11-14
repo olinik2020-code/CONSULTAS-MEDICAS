@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Caso clínico interactivo N.º 2 | El misterio de las opacidades pulmonares</title>
+<style>
+:root{--ink:#183044;--muted:#607487;--blue:#176b87;--pale:#eaf4f7;--line:#d6e2e8;--green:#287a57;--amber:#a76513;--red:#a33b3b}
+*{box-sizing:border-box}body{margin:0;background:#f3f7f9;color:var(--ink);font:16px/1.55 system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+header{background:linear-gradient(120deg,#12384e,#176b87);color:white;padding:36px 20px}
+header .wrap,main{max-width:980px;margin:auto}h1{font-size:clamp(1.8rem,4vw,2.6rem);line-height:1.15;margin:0 0 12px}header p{max-width:760px;margin:0;color:#e5f1f5}
+main{padding:24px 16px 60px}.notice{background:#fff8e9;border:1px solid #efd8a8;border-radius:12px;padding:14px 16px;margin-bottom:20px;color:#684b1e}
+.progress{display:flex;gap:7px;margin:18px 0 24px}.dot{height:7px;flex:1;border-radius:20px;background:#d9e3e8}.dot.active{background:var(--blue)}
+.panel{background:white;border:1px solid var(--line);border-radius:16px;padding:clamp(18px,3vw,28px);box-shadow:0 8px 24px #16394b0b;margin-bottom:18px}
+h2{margin:0 0 12px;font-size:1.45rem}h3{margin:20px 0 8px;font-size:1.05rem;color:#24556b}
+.muted{color:var(--muted)}.tag{display:inline-block;background:var(--pale);color:#15546b;border-radius:30px;padding:4px 10px;font-size:.82rem;font-weight:650;margin:0 6px 8px 0}
+ul{padding-left:22px}.choices{display:grid;gap:10px;margin:14px 0}.choice{display:flex;gap:10px;align-items:flex-start;border:1px solid var(--line);border-radius:11px;padding:12px;cursor:pointer;background:#fff}.choice:hover{border-color:var(--blue);background:#f7fbfc}.choice input{margin-top:5px;accent-color:var(--blue)}
+button{border:0;border-radius:10px;padding:11px 18px;background:var(--blue);color:white;font-weight:700;font-size:1rem;cursor:pointer;margin:8px 8px 0 0}button:hover{filter:brightness(.93)}button.secondary{background:#e8f0f3;color:#21495c}button:disabled{opacity:.45;cursor:not-allowed}
+.feedback{padding:13px 15px;border-radius:10px;margin:14px 0;background:#edf5f8;border-left:4px solid var(--blue)}.feedback.good{background:#edf7f0;border-color:var(--green)}.feedback.warn{background:#fff6e9;border-color:var(--amber)}
+.hidden{display:none!important}.result{font-weight:700}.footer{font-size:.9rem;color:var(--muted);text-align:center;margin-top:30px}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:.95rem}td,th{border:1px solid var(--line);padding:9px;text-align:left;vertical-align:top}th{background:#edf4f6}
+input[type=text]{padding:10px;border:1px solid var(--line);border-radius:8px;width:min(100%,500px)}
+@media(max-width:600px){header{padding:28px 18px}table{font-size:.86rem}}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+<span class="tag" style="background:#d9edf3;color:#174c60">Simulación educativa</span>
+<h1>Caso clínico interactivo N.º 2</h1>
+<p><strong>El misterio de las opacidades pulmonares</strong><br>Investigá el diagnóstico diferencial entre neumonitis por hipersensibilidad y tuberculosis pulmonar. Avanzá por etapas, solicitá estudios e interpretá evidencias antes de tomar una decisión.</p>
+</div></header>
+<main>
+<div class="notice"><strong>Importante:</strong> caso completamente ficticio con resultados simulados. Es un recurso educativo y no reemplaza la evaluación clínica, las guías vigentes ni el criterio profesional. En la práctica, ante sospecha de tuberculosis se aplican medidas de control de infección y se completa el estudio microbiológico.</div>
+<div class="progress" aria-label="Progreso del caso"><span class="dot active"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+<section class="panel" id="stage"></section>
+<div class="footer">Material didáctico · Diagnóstico diferencial clínico, radiológico y microbiológico</div>
+</main>
+<script>
+const stage=document.getElementById('stage'),dots=[...document.querySelectorAll('.dot')];
+let step=0,answers={};
+function updateProgress(){dots.forEach((d,i)=>d.classList.toggle('active',i<=step))}
+function render(){
+ updateProgress();
+ const pages=[
+ `<span class="tag">Etapa 1 de 5</span><h2>Historia clínica y primera hipótesis</h2>
+ <p>Un varón ficticio de <strong>52 años</strong> consulta por tos persistente y dificultad respiratoria progresiva. Trabaja en un establecimiento industrial y refiere exposición frecuente a polvo y material orgánico almacenado en un galpón con ventilación deficiente.</p>
+ <h3>Antecedentes y síntomas</h3><ul><li>Tos de varias semanas, inicialmente seca.</li><li>Disnea al esfuerzo y episodios febriles.</li><li>Sudoración nocturna y pérdida involuntaria de aproximadamente 4 kg.</li><li>Empeoramiento de la tos algunos días después de permanecer en el galpón.</li><li>No aporta inicialmente antecedentes conocidos de tuberculosis.</li></ul>
+ <p><strong>Examen:</strong> temperatura 37,8 °C, frecuencia respiratoria 22/min, saturación 93% al aire ambiente. Crepitantes finos bilaterales, sin signos periféricos específicos.</p>
+ <h3>Tu primera decisión</h3><p>¿Qué hipótesis iniciales considerarías? Elegí la opción más adecuada.</p>
+ <div class="choices"><label class="choice"><input type="radio" name="a" value="1">Neumonitis por hipersensibilidad como única posibilidad; no hace falta investigar infección.</label><label class="choice"><input type="radio" name="a" value="2">Tuberculosis pulmonar como única posibilidad; la exposición ambiental carece de relevancia.</label><label class="choice"><input type="radio" name="a" value="3">Mantener un diagnóstico diferencial amplio: neumonitis por hipersensibilidad, tuberculosis y otras causas infecciosas o intersticiales.</label></div>
+ <button onclick="check(1)">Confirmar hipótesis</button><div id="fb"></div>`,
+ `<span class="tag">Etapa 2 de 5</span><h2>Tomografía de alta resolución (TCAR)</h2>
+ <p>Se solicita una TCAR para caracterizar el patrón pulmonar. <strong>Descripción educativa simulada:</strong></p>
+ <ul><li>Opacidades en vidrio esmerilado bilaterales, de distribución parcheada.</li><li>Pequeños nódulos centrolobulillares mal definidos en algunas regiones.</li><li>Áreas de atenuación en mosaico y posible atrapamiento aéreo en espiración.</li><li>No se identifica una cavidad apical franca en esta descripción.</li></ul>
+ <h3>Interpretación</h3><p>¿Cuál es la lectura más prudente?</p>
+ <div class="choices"><label class="choice"><input type="radio" name="a" value="1">El vidrio esmerilado confirma tuberculosis.</label><label class="choice"><input type="radio" name="a" value="2">El mosaico y el atrapamiento aéreo pueden apoyar neumonitis por hipersensibilidad, pero no son diagnósticos por sí solos.</label><label class="choice"><input type="radio" name="a" value="3">La ausencia de cavitación descarta tuberculosis.</label></div>
+ <button onclick="check(2)">Interpretar TCAR</button><div id="fb"></div>
+ <button class="secondary" onclick="hint(2)">Mostrar pista</button><div id="hint"></div>`,
+ `<span class="tag">Etapa 3 de 5</span><h2>Estudios microbiológicos</h2>
+ <p>Por los síntomas constitucionales y la posibilidad de tuberculosis, se indican muestras respiratorias y pruebas microbiológicas. En un escenario real se deben aplicar precauciones respiratorias según el protocolo local.</p>
+ <table><tr><th>Estudio</th><th>Resultado simulado</th><th>Lectura inicial</th></tr><tr><td>Baciloscopía de esputo</td><td>Negativa en la muestra inicial</td><td>Una baciloscopía negativa no excluye tuberculosis.</td></tr><tr><td>Prueba molecular rápida (tipo Xpert MTB/RIF)</td><td><strong>Complejo M. tuberculosis detectado</strong>; sin resistencia a rifampicina detectada</td><td>Hallazgo que requiere correlación clínica y confirmación/seguimiento según algoritmo local.</td></tr><tr><td>Cultivo</td><td>Pendiente</td><td>Permite confirmación y estudios adicionales de sensibilidad.</td></tr></table>
+ <h3>Decisión clínica</h3><p>¿Qué conclusión es la más apropiada?</p>
+ <div class="choices"><label class="choice"><input type="radio" name="a" value="1">La baciloscopía negativa invalida el resultado molecular.</label><label class="choice"><input type="radio" name="a" value="2">El resultado molecular detectado aumenta fuertemente la sospecha de tuberculosis; se debe continuar el algoritmo diagnóstico y actuar según normas de control.</label><label class="choice"><input type="radio" name="a" value="3">El resultado demuestra neumonitis por hipersensibilidad.</label></div>
+ <button onclick="check(3)">Evaluar microbiología</button><div id="fb"></div>
+ <button class="secondary" onclick="hint(3)">Mostrar pista</button><div id="hint"></div>`,
+ `<span class="tag">Etapa 4 de 5</span><h2>Exposición ambiental, IgG y lavado broncoalveolar</h2>
+ <p>La entrevista ampliada revela que el galpón almacena heno húmedo y material con moho. Los síntomas tienden a intensificarse tras la exposición. Se solicitan estudios para explorar una posible neumonitis por hipersensibilidad.</p>
+ <table><tr><th>Estudio</th><th>Resultado simulado</th><th>Qué aporta</th></tr><tr><td>IgG específica frente a antígenos ambientales seleccionados</td><td>Elevada frente a un antígeno relacionado con mohos</td><td>Apoya exposición/sensibilización; no confirma por sí sola enfermedad.</td></tr><tr><td>Lavado broncoalveolar (BAL)</td><td>Linfocitos 32% en el recuento diferencial</td><td>La linfocitosis puede apoyar el diagnóstico en el contexto adecuado, pero no es específica.</td></tr><tr><td>Correlación radiológica</td><td>Atrapamiento aéreo y nódulos centrolobulillares</td><td>Puede ser compatible con neumonitis por hipersensibilidad.</td></tr></table>
+ <h3>¿Cómo integrás estos datos?</h3>
+ <div class="choices"><label class="choice"><input type="radio" name="a" value="1">La IgG elevada confirma neumonitis por hipersensibilidad y descarta infección.</label><label class="choice"><input type="radio" name="a" value="2">Los datos ambientales, de TCAR y BAL apoyan neumonitis por hipersensibilidad, pero deben integrarse con la evidencia microbiológica de tuberculosis.</label><label class="choice"><input type="radio" name="a" value="3">La linfocitosis del BAL confirma tuberculosis.</label></div>
+ <button onclick="check(4)">Integrar evidencias</button><div id="fb"></div>
+ <button class="secondary" onclick="hint(4)">Mostrar pista</button><div id="hint"></div>`,
+ `<span class="tag">Etapa 5 de 5</span><h2>Conclusión y diagnóstico diferencial</h2>
+ <p>Disponés de síntomas constitucionales, exposición ambiental, hallazgos compatibles en TCAR, IgG específica elevada, linfocitosis en BAL y una prueba molecular respiratoria que detecta complejo <em>M. tuberculosis</em>. El cultivo continúa pendiente.</p>
+ <h3>Decisión final</h3><p>¿Cuál es la conclusión educativa mejor fundamentada con los datos disponibles?</p>
+ <div class="choices"><label class="choice"><input type="radio" name="a" value="1">Diagnosticar exclusivamente neumonitis por hipersensibilidad y descartar tuberculosis.</label><label class="choice"><input type="radio" name="a" value="2">Considerar tuberculosis pulmonar como una posibilidad prioritaria por la prueba molecular positiva, sin olvidar que puede coexistir otra patología; completar evaluación y cultivo.</label><label class="choice"><input type="radio" name="a" value="3">Afirmar que la TCAR por sí sola confirma ambas enfermedades.</label></div>
+ <button onclick="finish()">Finalizar caso</button><div id="fb"></div>
+ <button class="secondary" onclick="hint(5)">Mostrar pista</button><div id="hint"></div>`
+ ];
+ stage.innerHTML=pages[step];
+}
+const correct={1:"3",2:"2",3:"2",4:"2",5:"2"};
+const explanations={
+1:"Correcto: los síntomas y la exposición permiten varias hipótesis. No se debe cerrar el diagnóstico antes de estudiar causas infecciosas relevantes.",
+2:"Correcto: el atrapamiento aéreo y la atenuación en mosaico pueden apoyar neumonitis por hipersensibilidad, pero la imagen no confirma ni excluye tuberculosis.",
+3:"Correcto: una prueba molecular detectada es un dato relevante. La baciloscopía negativa no la invalida; se continúa el algoritmo diagnóstico y el cultivo.",
+4:"Correcto: IgG específica y linfocitosis en BAL son piezas de apoyo, no pruebas aisladas confirmatorias. La evidencia de infección debe ponderarse.",
+5:"Correcto: la detección molecular de M. tuberculosis exige priorizar la evaluación y el manejo de tuberculosis según normas. La coexistencia de procesos no se resuelve solo con estos datos."
+};
+function check(n){const v=document.querySelector('input[name="a"]:checked');const fb=document.getElementById('fb');if(!v){fb.className='feedback warn';fb.textContent='Seleccioná una respuesta para continuar.';return}
+ const ok=v.value===correct[n];fb.className='feedback '+(ok?'good':'warn');fb.innerHTML=(ok?'¡Bien razonado! ':'Revisá esta interpretación. ')+explanations[n]+(n<5?' <br><button onclick="next()">Continuar</button>':'');answers[n]=v.value}
+function next(){if(step<4){step++;render();window.scrollTo({top:0,behavior:'smooth'})}}
+function hint(n){const hints={2:'Pista: los patrones de atrapamiento aéreo y atenuación en mosaico son útiles al evaluar enfermedad de pequeñas vías aéreas; ningún patrón aislado es exclusivo.',3:'Pista: las pruebas moleculares y la baciloscopía no tienen la misma sensibilidad. Interpretá el conjunto y seguí el algoritmo diagnóstico.',4:'Pista: la IgG específica suele indicar exposición/sensibilización. El BAL aporta contexto, no una confirmación independiente.',5:'Pista: diferenciá evidencia de infección activa, evidencia de exposición ambiental y posibilidad de coexistencia.'};document.getElementById('hint').textContent=hints[n]||'Pista: mantené un diagnóstico diferencial amplio.';document.getElementById('hint').className='feedback'}
+function finish(){const v=document.querySelector('input[name="a"]:checked'),fb=document.getElementById('fb');if(!v){fb.className='feedback warn';fb.textContent='Seleccioná una conclusión para finalizar.';return}answers[5]=v.value;let score=Object.keys(answers).filter(k=>answers[k]===correct[k]).length;fb.className='feedback good';fb.innerHTML=`<h3>Simulación finalizada</h3><p class="result">Resultado: ${score} de 5 decisiones adecuadas.</p><p><strong>Conclusión docente:</strong> el caso contiene evidencia que apoya neumonitis por hipersensibilidad (exposición, TCAR y BAL), pero la detección molecular de complejo M. tuberculosis obliga a priorizar la evaluación de tuberculosis pulmonar y completar cultivo y sensibilidad. Los hallazgos no permiten asumir que una condición excluya automáticamente a la otra.</p><p><strong>Para debatir:</strong> ¿qué otros diagnósticos considerarías?, ¿qué importancia tiene la calidad de la muestra?, ¿cómo cambia la conducta ante sospecha de tuberculosis?, ¿qué datos adicionales fortalecerían o debilitarían la hipótesis de neumonitis por hipersensibilidad?</p><button onclick="restart()">Reiniciar caso</button>`}
+function restart(){step=0;answers={};render();window.scrollTo({top:0,behavior:'smooth'})}
+render();
+</script>
+</body></html>
